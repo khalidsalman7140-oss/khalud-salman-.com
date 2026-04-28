@@ -1,0 +1,1957 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خالد سلمان | Khalid Salman - Flutter Developer & AI Specialist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/sql-wasm.js"></script>
+<style>
+:root {
+--primary: #6c5ce7;
+--primary-light: #a29bfe;
+--primary-dark: #5a4bd1;
+--secondary: #00cec9;
+--accent: #fd79a8;
+--dark: #0a0a1a;
+--dark-2: #12122a;
+--dark-3: #1a1a3e;
+--dark-4: #222252;
+--text: #e8e8f0;
+--text-muted: #8888aa;
+--glass: rgba(255,255,255,0.05);
+--glass-border: rgba(255,255,255,0.1);
+--gradient-1: linear-gradient(135deg, #6c5ce7, #00cec9);
+--gradient-2: linear-gradient(135deg, #fd79a8, #6c5ce7);
+--gradient-3: linear-gradient(135deg, #00cec9, #6c5ce7, #fd79a8);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+font-family: 'Cairo', 'Inter', sans-serif;
+background: var(--dark);
+color: var(--text);
+overflow-x: hidden;
+line-height: 1.7;
+}
+body.en { font-family: 'Inter', 'Cairo', sans-serif; direction: ltr; }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+/* Loader */
+#loader {
+position: fixed; inset:0; z-index: 10000;
+background: var(--dark);
+display: flex; align-items: center; justify-content: center;
+flex-direction: column; gap: 20px;
+transition: opacity 0.5s, visibility 0.5s;
+}
+#loader.hidden { opacity:0; visibility:hidden; }
+.loader-ring {
+width: 80px; height: 80px;
+border: 4px solid var(--dark-3);
+border-top-color: var(--primary);
+border-right-color: var(--secondary);
+border-radius: 50%;
+animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loader-text {
+font-size: 1.2rem; color: var(--primary-light);
+animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{ opacity:0.5; } 50%{ opacity:1; } }
+
+/* Particles */
+#particles-canvas {
+position: fixed; inset:0; z-index:0;
+pointer-events: none;
+}
+
+/* Navigation */
+.navbar {
+position: fixed; top:0; left:0; right:0; z-index:1000;
+padding: 15px 40px;
+background: rgba(10,10,26,0.85);
+backdrop-filter: blur(20px);
+border-bottom: 1px solid var(--glass-border);
+display: flex; align-items: center; justify-content: space-between;
+transition: all 0.3s;
+}
+.navbar.scrolled {
+padding: 10px 40px;
+background: rgba(10,10,26,0.95);
+box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+}
+.nav-logo {
+display: flex; align-items: center; gap: 12px;
+text-decoration: none; color: var(--text);
+}
+.nav-logo-img {
+width: 45px; height: 45px;
+border-radius: 50%;
+border: 2px solid var(--primary);
+object-fit: cover;
+}
+.nav-logo-text {
+font-size: 1.3rem; font-weight: 800;
+background: var(--gradient-1);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+.nav-links {
+display: flex; align-items: center; gap: 8px;
+list-style: none;
+}
+.nav-links a {
+text-decoration: none; color: var(--text-muted);
+padding: 8px 16px; border-radius: 8px;
+font-size: 0.95rem; font-weight: 600;
+transition: all 0.3s;
+position: relative;
+}
+.nav-links a:hover, .nav-links a.active {
+color: var(--text);
+background: var(--glass);
+}
+.nav-links a.active::after {
+content:''; position: absolute; bottom:2px; left:50%; transform:translateX(-50%);
+width: 20px; height: 3px; background: var(--gradient-1); border-radius:2px;
+}
+.nav-actions {
+display: flex; align-items: center; gap: 10px;
+}
+.lang-toggle {
+background: var(--glass);
+border: 1px solid var(--glass-border);
+color: var(--text); padding: 8px 16px;
+border-radius: 8px; cursor: pointer;
+font-size: 0.9rem; font-weight: 600;
+transition: all 0.3s;
+font-family: inherit;
+}
+.lang-toggle:hover {
+background: var(--primary);
+border-color: var(--primary);
+}
+.google-search-btn {
+background: var(--glass);
+border: 1px solid var(--glass-border);
+color: var(--text); padding: 8px 14px;
+border-radius: 8px; cursor: pointer;
+font-size: 1rem; transition: all 0.3s;
+display: flex; align-items: center; gap: 6px;
+}
+.google-search-btn:hover {
+background: var(--dark-4);
+border-color: var(--secondary);
+color: var(--secondary);
+}
+.mobile-menu-btn {
+display: none;
+background: none; border: none;
+color: var(--text); font-size: 1.5rem;
+cursor: pointer;
+}
+
+/* Hero Section */
+.hero {
+min-height: 100vh;
+display: flex; align-items: center;
+position: relative; overflow: hidden;
+padding: 120px 40px 80px;
+}
+.hero-bg {
+position: absolute; inset:0;
+background: url('https://image.qwenlm.ai/public_source/0c41cd04-b4b2-4753-8e23-5022c71aa524/189002fd1-65cb-4738-ba59-d61f1d996723.png') center/cover;
+opacity: 0.15;
+}
+.hero-gradient {
+position: absolute; inset:0;
+background: radial-gradient(ellipse at 30% 50%, rgba(108,92,231,0.15), transparent 60%),
+radial-gradient(ellipse at 70% 50%, rgba(0,206,201,0.1), transparent 60%);
+}
+.hero-content {
+position: relative; z-index:2;
+max-width: 1200px; margin: 0 auto;
+display: grid; grid-template-columns: 1fr 1fr;
+gap: 60px; align-items: center;
+width: 100%;
+}
+.hero-text { animation: fadeInUp 1s ease; }
+.hero-badge {
+display: inline-flex; align-items: center; gap: 8px;
+background: var(--glass);
+border: 1px solid var(--glass-border);
+padding: 8px 20px; border-radius: 50px;
+font-size: 0.9rem; color: var(--secondary);
+margin-bottom: 20px;
+}
+.hero-badge i { animation: blink 2s infinite; }
+@keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
+.hero-title {
+font-size: 3.5rem; font-weight: 900;
+line-height: 1.2; margin-bottom: 10px;
+}
+.hero-title .gradient-text {
+background: var(--gradient-1);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+.hero-subtitle {
+font-size: 1.4rem; color: var(--text-muted);
+margin-bottom: 25px;
+}
+.hero-desc {
+font-size: 1.05rem; color: var(--text-muted);
+margin-bottom: 35px; max-width: 520px;
+line-height: 1.8;
+}
+.hero-buttons {
+display: flex; gap: 15px; flex-wrap: wrap;
+}
+.btn-primary {
+background: var(--gradient-1);
+color: white; padding: 14px 32px;
+border-radius: 12px; text-decoration: none;
+font-weight: 700; font-size: 1rem;
+border: none; cursor: pointer;
+transition: all 0.3s;
+display: inline-flex; align-items: center; gap: 8px;
+box-shadow: 0 4px 20px rgba(108,92,231,0.3);
+font-family: inherit;
+}
+.btn-primary:hover {
+transform: translateY(-3px);
+box-shadow: 0 8px 30px rgba(108,92,231,0.5);
+}
+.btn-secondary {
+background: var(--glass);
+border: 1px solid var(--glass-border);
+color: var(--text); padding: 14px 32px;
+border-radius: 12px; text-decoration: none;
+font-weight: 700; font-size: 1rem;
+cursor: pointer; transition: all 0.3s;
+display: inline-flex; align-items: center; gap: 8px;
+font-family: inherit;
+}
+.btn-secondary:hover {
+background: var(--dark-4);
+border-color: var(--primary-light);
+transform: translateY(-3px);
+}
+.hero-image {
+display: flex; justify-content: center;
+animation: fadeInUp 1s ease 0.3s both;
+}
+.hero-avatar-wrapper {
+position: relative;
+}
+.hero-avatar {
+width: 380px; height: 380px;
+border-radius: 30px;
+object-fit: cover;
+border: 3px solid var(--glass-border);
+position: relative; z-index:2;
+}
+.avatar-glow {
+position: absolute; inset: -20px;
+background: var(--gradient-1);
+border-radius: 35px;
+opacity: 0.2; filter: blur(30px);
+z-index: 1;
+}
+.avatar-ring {
+position: absolute; inset: -8px;
+border: 2px solid var(--primary-light);
+border-radius: 34px; opacity: 0.3;
+animation: ringPulse 3s ease-in-out infinite;
+z-index: 1;
+}
+@keyframes ringPulse {
+0%,100% { transform: scale(1); opacity:0.3; }
+50% { transform: scale(1.02); opacity:0.6; }
+}
+.hero-stats {
+display: flex; gap: 40px; margin-top: 40px;
+}
+.stat-item {
+text-align: center;
+}
+.stat-number {
+font-size: 2rem; font-weight: 900;
+background: var(--gradient-1);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+.stat-label {
+font-size: 0.85rem; color: var(--text-muted);
+}
+@keyframes fadeInUp {
+from { opacity:0; transform:translateY(30px); }
+to { opacity:1; transform:translateY(0); }
+}
+
+/* Sections */
+section {
+padding: 100px 40px;
+position: relative;
+}
+.section-header {
+text-align: center; margin-bottom: 60px;
+}
+.section-badge {
+display: inline-flex; align-items: center; gap: 8px;
+background: var(--glass);
+border: 1px solid var(--glass-border);
+padding: 6px 18px; border-radius: 50px;
+font-size: 0.85rem; color: var(--secondary);
+margin-bottom: 15px;
+}
+.section-title {
+font-size: 2.5rem; font-weight: 900;
+margin-bottom: 15px;
+}
+.section-title .gradient-text {
+background: var(--gradient-1);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+}
+.section-desc {
+color: var(--text-muted);
+max-width: 600px; margin: 0 auto;
+font-size: 1.05rem;
+}
+
+/* About Section */
+.about-grid {
+max-width: 1200px; margin: 0 auto;
+display: grid; grid-template-columns: 1fr 1fr;
+gap: 60px; align-items: center;
+}
+.about-image-wrapper {
+position: relative;
+}
+.about-image {
+width: 100%;
+max-width: 450px;
+border-radius: 24px;
+border: 2px solid var(--glass-border);
+}
+.about-info-cards {
+display: grid; grid-template-columns: 1fr 1fr;
+gap: 15px; margin-top: 30px;
+}
+.info-card {
+background: var(--glass);
+border: 1px solid var(--glass-border);
+padding: 20px; border-radius: 16px;
+text-align: center;
+transition: all 0.3s;
+}
+.info-card:hover {
+border-color: var(--primary);
+transform: translateY(-5px);
+box-shadow: 0 10px 30px rgba(108,92,231,0.15);
+}
+.info-card i {
+font-size: 1.8rem;
+background: var(--gradient-1);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+margin-bottom: 8px;
+display: block;
+}
+.info-card .label {
+font-size: 0.8rem; color: var(--text-muted);
+}
+.info-card .value {
+font-size: 1rem; font-weight: 700;
+}
+.about-text h3 {
+font-size: 1.8rem; font-weight: 800;
+margin-bottom: 20px;
+}
+.about-text p {
+color: var(--text-muted);
+margin-bottom: 15px;
+font-size: 1.02rem;
+line-height: 1.9;
+}
+
+/* Skills Section */
+.skills-container {
+max-width: 1200px; margin: 0 auto;
+}
+.skills-tabs {
+display: flex; justify-content: center;
+gap: 10px; margin-bottom: 40px;
+flex-wrap: wrap;
+}
+.skill-tab {
+background: var(--glass);
+border: 1px solid var(--glass-border);
+color: var(--text-muted); padding: 10px 24px;
+border-radius: 10px; cursor: pointer;
+font-weight: 600; font-size: 0.95rem;
+transition: all 0.3s;
+font-family: inherit;
+}
+.skill-tab.active, .skill-tab:hover {
+background: var(--primary);
+color: white;
+border-color: var(--primary);
+}
+.skills-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+gap: 20px;
+}
+.skill-card {
+background: var(--dark-2);
+border: 1px solid var(--glass-border);
+border-radius: 20px;
+padding: 30px;
+transition: all 0.3s;
+position: relative;
+overflow: hidden;
+}
+.skill-card::before {
+content:''; position: absolute; top:0; left:0; right:0;
+height: 3px; background: var(--gradient-1);
+opacity: 0; transition: opacity 0.3s;
+}
+.skill-card:hover {
+border-color: var(--primary);
+transform: translateY(-5px);
+box-shadow: 0 15px 40px rgba(108,92,231,0.15);
+}
+.skill-card:hover::before { opacity:1; }
+.skill-icon {
+width: 55px; height: 55px;
+background: var(--glass);
+border-radius: 14px;
+display: flex; align-items: center; justify-content: center;
+font-size: 1.5rem; margin-bottom: 18px;
+}
+.skill-card h4 {
+font-size: 1.15rem; font-weight: 700;
+margin-bottom: 8px;
+}
+.skill-card p {
+font-size: 0.9rem; color: var(--text-muted);
+line-height: 1.7;
+}
+.skill-bar-wrapper {
+margin-top: 15px;
+}
+.skill-bar-bg {
+height: 6px; background: var(--dark-4);
+border-radius: 3px; overflow: hidden;
+}
+.skill-bar-fill {
+height: 100%; background: var(--gradient-1);
+border-radius: 3px; width: 0;
+transition: width 1.5s ease;
+}
+.skill-level {
+font-size: 0.8rem; color: var(--secondary);
+margin-top: 5px; font-weight: 600;
+}
+
+/* Projects Section */
+.projects-container { max-width: 1200px; margin: 0 auto; }
+.projects-grid {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+gap: 25px;
+}
+.project-card {
+background: var(--dark-2);
+border: 1px solid var(--glass-border);
+border-radius: 20px;
+overflow: hidden;
+transition: all 0.3s;
+}
+.project-card:hover {
+border-color: var(--primary);
+transform: translateY(-8px);
+box-shadow: 0 20px 50px rgba(108,92,231,0.15);
+}
+.project-image {
+width: 100%; height: 200px;
+object-fit: cover;
+border-bottom: 1px solid var(--glass-border);
+}
+.project-content { padding: 25px; }
+.project-tags {
+display: flex; gap: 8px; flex-wrap: wrap;
+margin-bottom: 15px;
+}
+.project-tag {
+background: var(--glass);
+border: 1px solid var(--glass-border);
+padding: 4px 12px; border-radius: 6px;
+font-size: 0.75rem; color: var(--secondary);
+font-weight: 600;
+}
+.project-card h3 {
+font-size: 1.2rem; font-weight: 700;
+margin-bottom: 10px;
+}
+.project-card p {
+font-size: 0.92rem; color: var(--text-muted);
+line-height: 1.7; margin-bottom: 20px;
+}
+.project-link {
+display: inline-flex; align-items: center; gap: 6px;
+color: var(--primary-light);
+text-decoration: none; font-weight: 600;
+font-size: 0.95rem;
+transition: color 0.3s;
+}
+.project-link:hover { color: var(--secondary); }
+
+/* Contact Section */
+.contact-container {
+max-width: 1000px; margin: 0 auto;
+}
+.contact-grid {
+display: grid; grid-template-columns: 1fr 1fr;
+gap: 40px;
+}
+.contact-info {
+display: flex; flex-direction: column; gap: 20px;
+}
+.contact-item {
+display: flex; align-items: center; gap: 18px;
+background: var(--glass);
+border: 1px solid var(--glass-border);
+padding: 20px; border-radius: 16px;
+transition: all 0.3s;
+text-decoration: none; color: var(--text);
+}
+.contact-item:hover {
+border-color: var(--primary);
+transform: translateX(-5px);
+}
+body.en .contact-item:hover { transform: translateX(5px); }
+.contact-icon {
+width: 50px; height: 50px;
+background: var(--gradient-1);
+border-radius: 14px;
+display: flex; align-items: center; justify-content: center;
+font-size: 1.2rem; color: white;
+flex-shrink: 0;
+}
+.contact-details .label {
+font-size: 0.8rem; color: var(--text-muted);
+}
+.contact-details .value {
+font-size: 1rem; font-weight: 600;
+}
+.contact-form {
+background: var(--dark-2);
+border: 1px solid var(--glass-border);
+border-radius: 20px;
+padding: 35px;
+}
+.form-group { margin-bottom: 20px; }
+.form-group label {
+display: block; margin-bottom: 8px;
+font-weight: 600; font-size: 0.95rem;
+}
+.form-group input, .form-group textarea {
+width: 100%; padding: 14px 18px;
+background: var(--dark-3);
+border: 1px solid var(--glass-border);
+border-radius: 12px;
+color: var(--text);
+font-size: 1rem;
+font-family: inherit;
+transition: all 0.3s;
+outline: none;
+}
+.form-group input:focus, .form-group textarea:focus {
+border-color: var(--primary);
+box-shadow: 0 0 0 3px rgba(108,92,231,0.15);
+}
+.form-group textarea { resize: vertical; min-height: 120px; }
+.form-submit {
+width: 100%;
+}
+.form-message {
+margin-top: 15px;
+padding: 12px;
+border-radius: 10px;
+font-size: 0.9rem;
+display: none;
+}
+.form-message.success {
+display: block;
+background: rgba(0,206,201,0.1);
+border: 1px solid var(--secondary);
+color: var(--secondary);
+}
+.form-message.error {
+display: block;
+background: rgba(253,121,168,0.1);
+border: 1px solid var(--accent);
+color: var(--accent);
+}
+
+/* Social Links */
+.social-links {
+display: flex; gap: 12px;
+margin-top: 20px;
+}
+.social-link {
+width: 48px; height: 48px;
+background: var(--glass);
+border: 1px solid var(--glass-border);
+border-radius: 14px;
+display: flex; align-items: center; justify-content: center;
+color: var(--text-muted);
+font-size: 1.2rem;
+text-decoration: none;
+transition: all 0.3s;
+}
+.social-link:hover {
+border-color: var(--primary);
+color: var(--primary-light);
+transform: translateY(-3px);
+box-shadow: 0 8px 20px rgba(108,92,231,0.2);
+}
+
+/* AI Chatbot */
+.chatbot-toggle {
+position: fixed; bottom: 25px; left: 25px;
+width: 60px; height: 60px;
+background: var(--gradient-1);
+border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+font-size: 1.5rem; color: white;
+cursor: pointer; z-index: 999;
+box-shadow: 0 8px 30px rgba(108,92,231,0.4);
+transition: all 0.3s;
+border: none;
+}
+body.en .chatbot-toggle { left: auto; right: 25px; }
+.chatbot-toggle:hover {
+transform: scale(1.1);
+box-shadow: 0 12px 40px rgba(108,92,231,0.6);
+}
+.chatbot-window {
+position: fixed; bottom: 100px; left: 25px;
+width: 380px; height: 520px;
+background: var(--dark-2);
+border: 1px solid var(--glass-border);
+border-radius: 20px;
+z-index: 998;
+display: none;
+flex-direction: column;
+overflow: hidden;
+box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+body.en .chatbot-window { left: auto; right: 25px; }
+.chatbot-window.open { display: flex; }
+.chatbot-header {
+background: var(--gradient-1);
+padding: 18px 20px;
+display: flex; align-items: center; justify-content: space-between;
+}
+.chatbot-header-info {
+display: flex; align-items: center; gap: 10px;
+}
+.chatbot-header-avatar {
+width: 36px; height: 36px;
+background: rgba(255,255,255,0.2);
+border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+font-size: 1rem;
+}
+.chatbot-header-name {
+font-weight: 700; font-size: 0.95rem;
+}
+.chatbot-header-status {
+font-size: 0.75rem; opacity: 0.8;
+}
+.chatbot-close {
+background: none; border: none;
+color: white; font-size: 1.2rem;
+cursor: pointer; opacity: 0.8;
+transition: opacity 0.3s;
+}
+.chatbot-close:hover { opacity:1; }
+.chatbot-messages {
+flex: 1; overflow-y: auto;
+padding: 20px;
+display: flex; flex-direction: column;
+gap: 12px;
+}
+.chat-message {
+max-width: 85%;
+padding: 12px 16px;
+border-radius: 16px;
+font-size: 0.9rem;
+line-height: 1.6;
+animation: msgIn 0.3s ease;
+}
+@keyframes msgIn {
+from { opacity:0; transform:translateY(10px); }
+to { opacity:1; transform:translateY(0); }
+}
+.chat-message.bot {
+background: var(--dark-3);
+border: 1px solid var(--glass-border);
+align-self: flex-start;
+border-bottom-left-radius: 4px;
+}
+body.en .chat-message.bot { border-bottom-left-radius: 16px; border-bottom-right-radius: 4px; }
+.chat-message.user {
+background: var(--primary);
+color: white;
+align-self: flex-end;
+border-bottom-right-radius: 4px;
+}
+body.en .chat-message.user { border-bottom-right-radius: 16px; border-bottom-left-radius: 4px; }
+.chat-typing {
+display: flex; gap: 4px; padding: 12px 16px;
+background: var(--dark-3);
+border-radius: 16px;
+align-self: flex-start;
+width: fit-content;
+}
+.typing-dot {
+width: 8px; height: 8px;
+background: var(--text-muted);
+border-radius: 50%;
+animation: typingBounce 1.4s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+0%,60%,100% { transform: translateY(0); }
+30% { transform: translateY(-8px); }
+}
+.chatbot-input {
+display: flex; gap: 10px;
+padding: 15px 20px;
+border-top: 1px solid var(--glass-border);
+}
+.chatbot-input input {
+flex: 1; padding: 12px 16px;
+background: var(--dark-3);
+border: 1px solid var(--glass-border);
+border-radius: 12px;
+color: var(--text);
+font-size: 0.9rem;
+outline: none;
+font-family: inherit;
+}
+.chatbot-input input:focus {
+border-color: var(--primary);
+}
+.chatbot-send {
+width: 44px; height: 44px;
+background: var(--gradient-1);
+border: none; border-radius: 12px;
+color: white; font-size: 1rem;
+cursor: pointer; transition: all 0.3s;
+display: flex; align-items: center; justify-content: center;
+}
+.chatbot-send:hover { transform: scale(1.05); }
+
+/* Footer */
+.footer {
+background: var(--dark-2);
+border-top: 1px solid var(--glass-border);
+padding: 50px 40px 30px;
+}
+.footer-content {
+max-width: 1200px; margin: 0 auto;
+display: grid; grid-template-columns: 2fr 1fr 1fr;
+gap: 40px;
+}
+.footer-brand h3 {
+font-size: 1.5rem; font-weight: 800;
+background: var(--gradient-1);
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+margin-bottom: 12px;
+}
+.footer-brand p {
+color: var(--text-muted);
+font-size: 0.95rem; line-height: 1.7;
+}
+.footer-links h4, .footer-contact h4 {
+font-size: 1.1rem; font-weight: 700;
+margin-bottom: 18px;
+}
+.footer-links ul { list-style: none; }
+.footer-links li { margin-bottom: 10px; }
+.footer-links a {
+color: var(--text-muted);
+text-decoration: none;
+transition: color 0.3s;
+font-size: 0.95rem;
+}
+.footer-links a:hover { color: var(--primary-light); }
+.footer-contact-item {
+display: flex; align-items: center; gap: 10px;
+margin-bottom: 12px; color: var(--text-muted);
+font-size: 0.95rem;
+}
+.footer-contact-item i { color: var(--primary-light); width: 20px; }
+.footer-bottom {
+max-width: 1200px; margin: 40px auto 0;
+padding-top: 25px;
+border-top: 1px solid var(--glass-border);
+display: flex; justify-content: space-between;
+align-items: center; flex-wrap: wrap; gap: 15px;
+}
+.footer-copyright {
+color: var(--text-muted);
+font-size: 0.9rem;
+}
+.footer-copyright .name {
+color: var(--primary-light); font-weight: 700;
+}
+.footer-social {
+display: flex; gap: 10px;
+}
+.footer-social a {
+width: 40px; height: 40px;
+background: var(--glass);
+border: 1px solid var(--glass-border);
+border-radius: 10px;
+display: flex; align-items: center; justify-content: center;
+color: var(--text-muted);
+text-decoration: none;
+transition: all 0.3s;
+}
+.footer-social a:hover {
+border-color: var(--primary);
+color: var(--primary-light);
+}
+
+/* Scroll to top */
+.scroll-top {
+position: fixed; bottom: 25px; right: 25px;
+width: 48px; height: 48px;
+background: var(--dark-3);
+border: 1px solid var(--glass-border);
+border-radius: 14px;
+display: flex; align-items: center; justify-content: center;
+color: var(--text-muted);
+font-size: 1.1rem;
+cursor: pointer; z-index: 997;
+transition: all 0.3s;
+opacity: 0; visibility: hidden;
+}
+.scroll-top.visible { opacity:1; visibility:visible; }
+.scroll-top:hover {
+background: var(--primary);
+color: white;
+border-color: var(--primary);
+}
+
+/* Google Search Modal */
+.search-modal {
+position: fixed; inset:0; z-index: 2000;
+background: rgba(10,10,26,0.9);
+backdrop-filter: blur(10px);
+display: none; align-items: flex-start; justify-content: center;
+padding-top: 120px;
+}
+.search-modal.open { display: flex; }
+.search-modal-content {
+width: 90%; max-width: 700px;
+background: var(--dark-2);
+border: 1px solid var(--glass-border);
+border-radius: 20px;
+padding: 30px;
+animation: modalIn 0.3s ease;
+}
+@keyframes modalIn {
+from { opacity:0; transform:translateY(-20px) scale(0.95); }
+to { opacity:1; transform:translateY(0) scale(1); }
+}
+.search-modal-header {
+display: flex; justify-content: space-between;
+align-items: center; margin-bottom: 20px;
+}
+.search-modal-header h3 {
+font-size: 1.3rem; font-weight: 700;
+}
+.search-modal-close {
+background: none; border: none;
+color: var(--text-muted); font-size: 1.3rem;
+cursor: pointer;
+}
+.search-input-wrapper {
+display: flex; gap: 10px;
+}
+.search-input-wrapper input {
+flex: 1; padding: 14px 20px;
+background: var(--dark-3);
+border: 1px solid var(--glass-border);
+border-radius: 14px;
+color: var(--text);
+font-size: 1rem;
+outline: none;
+font-family: inherit;
+}
+.search-input-wrapper input:focus {
+border-color: var(--primary);
+}
+.search-google-btn {
+padding: 14px 24px;
+background: var(--gradient-1);
+border: none; border-radius: 14px;
+color: white; font-weight: 700;
+cursor: pointer; font-size: 1rem;
+transition: all 0.3s;
+display: flex; align-items: center; gap: 8px;
+font-family: inherit;
+}
+.search-google-btn:hover {
+transform: translateY(-2px);
+box-shadow: 0 8px 25px rgba(108,92,231,0.3);
+}
+
+/* Database Panel */
+.db-panel {
+position: fixed; top: 50%; right: -400px;
+width: 380px; height: 70vh;
+background: var(--dark-2);
+border: 1px solid var(--glass-border);
+border-radius: 20px 0 0 20px;
+z-index: 1500;
+transition: right 0.4s ease;
+display: flex; flex-direction: column;
+overflow: hidden;
+box-shadow: -10px 0 40px rgba(0,0,0,0.3);
+}
+body.en .db-panel { right: auto; left: -400px; border-radius: 0 20px 20px 0; }
+.db-panel.open { right: 0; }
+body.en .db-panel.open { left: 0; }
+.db-panel-header {
+background: var(--gradient-1);
+padding: 18px 20px;
+display: flex; align-items: center; justify-content: space-between;
+}
+.db-panel-header h3 {
+font-size: 1.1rem; font-weight: 700;
+display: flex; align-items: center; gap: 8px;
+}
+.db-panel-close {
+background: none; border: none;
+color: white; font-size: 1.2rem;
+cursor: pointer;
+}
+.db-panel-body {
+flex: 1; overflow-y: auto; padding: 20px;
+}
+.db-record {
+background: var(--dark-3);
+border: 1px solid var(--glass-border);
+border-radius: 12px;
+padding: 15px;
+margin-bottom: 12px;
+}
+.db-record .record-time {
+font-size: 0.75rem; color: var(--text-muted);
+margin-bottom: 6px;
+}
+.db-record .record-name {
+font-weight: 700; font-size: 0.95rem;
+margin-bottom: 4px;
+}
+.db-record .record-email {
+font-size: 0.85rem; color: var(--secondary);
+margin-bottom: 8px;
+}
+.db-record .record-msg {
+font-size: 0.9rem; color: var(--text-muted);
+line-height: 1.5;
+}
+.db-empty {
+text-align: center; color: var(--text-muted);
+padding: 40px 20px;
+}
+.db-empty i { font-size: 3rem; margin-bottom: 15px; display: block; opacity:0.3; }
+
+/* Animations */
+.reveal {
+opacity: 0; transform: translateY(40px);
+transition: all 0.8s ease;
+}
+.reveal.visible {
+opacity: 1; transform: translateY(0);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+.hero-content { grid-template-columns: 1fr; text-align: center; }
+.hero-image { order: -1; }
+.hero-avatar { width: 280px; height: 280px; }
+.hero-desc { margin: 0 auto 35px; }
+.hero-buttons { justify-content: center; }
+.hero-stats { justify-content: center; }
+.about-grid { grid-template-columns: 1fr; }
+.about-image-wrapper { text-align: center; }
+.contact-grid { grid-template-columns: 1fr; }
+.footer-content { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+.navbar { padding: 12px 20px; }
+.nav-links { display: none; }
+.mobile-menu-btn { display: block; }
+.nav-links.open {
+display: flex; flex-direction: column;
+position: absolute; top: 100%; left:0; right:0;
+background: rgba(10,10,26,0.98);
+padding: 20px;
+border-bottom: 1px solid var(--glass-border);
+}
+.hero { padding: 100px 20px 60px; }
+.hero-title { font-size: 2.5rem; }
+.hero-avatar { width: 220px; height: 220px; }
+section { padding: 60px 20px; }
+.section-title { font-size: 2rem; }
+.projects-grid { grid-template-columns: 1fr; }
+.skills-grid { grid-template-columns: 1fr; }
+.footer-content { grid-template-columns: 1fr; }
+.chatbot-window { width: calc(100% - 30px); left: 15px !important; right: 15px !important; bottom: 90px; }
+.db-panel { width: calc(100% - 20px); }
+.hero-stats { gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Loader -->
+<div id="loader">
+<div class="loader-ring"></div>
+<div class="loader-text" data-ar="جاري التحميل..." data-en="Loading...">جاري التحميل...</div>
+</div>
+
+<!-- Particles -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- Navigation -->
+<nav class="navbar" id="navbar">
+<a href="#" class="nav-logo">
+<img src="IMG-20250725-WA0007.jpg" alt="خالد سلمان" class="nav-logo-img">
+<span class="nav-logo-text">خالد سلمان</span>
+</a>
+<ul class="nav-links" id="navLinks">
+<li><a href="#home" class="active" data-ar="الرئيسية" data-en="Home">الرئيسية</a></li>
+<li><a href="#about" data-ar="عني" data-en="About">عني</a></li>
+<li><a href="#skills" data-ar="المهارات" data-en="Skills">المهارات</a></li>
+<li><a href="#projects" data-ar="المشاريع" data-en="Projects">المشاريع</a></li>
+<li><a href="#contact" data-ar="التواصل" data-en="Contact">التواصل</a></li>
+</ul>
+<div class="nav-actions">
+<button class="google-search-btn" onclick="openSearchModal()" title="Google Search">
+<i class="fab fa-google"></i>
+</button>
+<button class="lang-toggle" id="langToggle" onclick="toggleLanguage()">EN</button>
+<button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+<i class="fas fa-bars"></i>
+</button>
+</div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero" id="home">
+<div class="hero-bg"></div>
+<div class="hero-gradient"></div>
+<div class="hero-content">
+<div class="hero-text">
+<div class="hero-badge">
+<i class="fas fa-circle"></i>
+<span data-ar="متاح للعمل" data-en="Available for work">متاح للعمل</span>
+</div>
+<h1 class="hero-title">
+<span data-ar="مرحباً، أنا" data-en="Hello, I'm">مرحباً، أنا</span><br>
+<span class="gradient-text" data-ar="خالد سلمان" data-en="Khalid Salman">خالد سلمان</span>
+</h1>
+<p class="hero-subtitle" data-ar="مبرمج فلاتر ومتخصص في الذكاء الاصطناعي" data-en="Flutter Developer & AI Specialist">مبرمج فلاتر ومتخصص في الذكاء الاصطناعي</p>
+<p class="hero-desc" data-ar="مطور تطبيقات موبايل عبر المنصات، متخصص في تطوير حلول مبتكرة باستخدام Flutter والذكاء الاصطناعي. أسعى لبناء تطبيقات عالية الأداء تحسّن حياة المستخدمين." data-en="Cross-platform mobile app developer, specializing in building innovative solutions using Flutter and AI. I strive to build high-performance apps that improve users' lives.">مطور تطبيقات موبايل عبر المنصات، متخصص في تطوير حلول مبتكرة باستخدام Flutter والذكاء الاصطناعي. أسعى لبناء تطبيقات عالية الأداء تحسّن حياة المستخدمين.</p>
+<div class="hero-buttons">
+<a href="#contact" class="btn-primary">
+<i class="fas fa-paper-plane"></i>
+<span data-ar="تواصل معي" data-en="Contact Me">تواصل معي</span>
+</a>
+<a href="#projects" class="btn-secondary">
+<i class="fas fa-code"></i>
+<span data-ar="مشاريعي" data-en="My Projects">مشاريعي</span>
+</a>
+</div>
+<div class="hero-stats">
+<div class="stat-item">
+<div class="stat-number" data-count="3">0</div>
+<div class="stat-label" data-ar="مشاريع" data-en="Projects">مشاريع</div>
+</div>
+<div class="stat-item">
+<div class="stat-number" data-count="8">0</div>
+<div class="stat-label" data-ar="تقنيات" data-en="Technologies">تقنيات</div>
+</div>
+<div class="stat-item">
+<div class="stat-number" data-count="2">0</div>
+<div class="stat-label" data-ar="سنة خبرة" data-en="Years Exp">سنة خبرة</div>
+</div>
+</div>
+</div>
+<div class="hero-image">
+<div class="hero-avatar-wrapper">
+<div class="avatar-glow"></div>
+<div class="avatar-ring"></div>
+<img src=" " alt="خالد سلمان" class="hero-avatar">
+</div>
+</div>
+</div>
+</section>
+
+<!-- About Section -->
+<section id="about">
+<div class="section-header reveal">
+<div class="section-badge">
+<i class="fas fa-user"></i>
+<span data-ar="تعرف عليّ" data-en="Get to know me">تعرف عليّ</span>
+</div>
+<h2 class="section-title">
+<span data-ar="من أنا؟" data-en="About Me">من أنا؟</span>
+<span class="gradient-text"></span>
+</h2>
+</div>    
+<div class="about-grid">
+<div class="about-image-wrapper reveal">
+<img src="IMG-20250725-WA0007.jpg".png" alt="خالد سلمان" class="about-image">
+<div class="about-info-cards">
+<div class="info-card">
+<i class="fas fa-birthday-cake"></i>
+<div class="label" data-ar="العمر" data-en="Age">العمر</div>
+<div class="value" data-ar="23 سنة" data-en="23 Years">23 سنة</div>
+</div>
+<div class="info-card">
+<i class="fas fa-heart"></i>
+<div class="label" data-ar="الحالة" data-en="Status">الحالة</div>
+<div class="value" data-ar="عازب" data-en="Single">عازب</div>
+</div>
+<div class="info-card">
+<i class="fas fa-map-marker-alt"></i>
+<div class="label" data-ar="الموقع" data-en="Location">الموقع</div>
+<div class="value" data-ar="إب، اليمن" data-en="Ibb, Yemen">إب، اليمن</div>
+</div>
+<div class="info-card">
+<i class="fas fa-laptop-code"></i>
+<div class="label" data-ar="المهنة" data-en="Profession">المهنة</div>
+<div class="value" data-ar="مبرمج فلاتر" data-en="Flutter Dev">مبرمج فلاتر</div>
+</div>
+</div>
+</div>
+<div class="about-text reveal">
+<h3 data-ar="مبرمج فلاتر ومتخصص في الذكاء الاصطناعي 🚀" data-en="Flutter Developer & AI Specialist 🚀">مبرمج فلاتر ومتخصص في الذكاء الاصطناعي 🚀</h3>
+<p data-ar="مرحبًا، أنا خالد سلمان، مبرمج فلاتر ومطور تطبيقات ذو خبرة في تطوير تطبيقات الموبايل عالية الأداء باستخدام Flutter. أنا متخصص في الذكاء الاصطناعي، وأركز على استخدام تقنيات مثل التعلم الآلي والرؤية الحاسوبية لتطوير حلول تكنولوجية مبتكرة." data-en="Hello, I'm Khalid Salman, a Flutter Developer and Mobile Application Developer with a strong focus on Artificial Intelligence. I specialize in developing cross-platform applications using Flutter and enhancing them with AI technologies such as Machine Learning and Computer Vision to create innovative solutions.">مرحبًا، أنا خالد سلمان، مبرمج فلاتر ومطور تطبيقات ذو خبرة في تطوير تطبيقات الموبايل عالية الأداء باستخدام Flutter. أنا متخصص في الذكاء الاصطناعي، وأركز على استخدام تقنيات مثل التعلم الآلي والرؤية الحاسوبية لتطوير حلول تكنولوجية مبتكرة.</p>
+<p data-ar="أعمل حاليًا على مشاريع تشمل تطبيقات موبايل تُبنى عبر المنصات المختلفة، حيث أسعى لجعلها أكثر تفاعلية وسهلة الاستخدام. لدي شغف بتحقيق تحسينات حقيقية في تجارب المستخدمين باستخدام تقنيات حديثة." data-en="Currently, I am working on mobile app projects that are optimized for performance and user experience across multiple platforms. I am passionate about improving user experiences and creating smarter, more efficient applications through cutting-edge technologies.">أعمل حاليًا على مشاريع تشمل تطبيقات موبايل تُبنى عبر المنصات المختلفة، حيث أسعى لجعلها أكثر تفاعلية وسهلة الاستخدام. لدي شغف بتحقيق تحسينات حقيقية في تجارب المستخدمين باستخدام تقنيات حديثة.</p>
+<p data-ar="أتطلع باستمرار لتوسيع معرفتي في مجالات مثل التعلم العميق والذكاء الاصطناعي المعزز، وأؤمن بأن التكنولوجيا يمكن أن تساهم في تحسين حياة البشر." data-en="I am constantly striving to deepen my knowledge in areas like Deep Learning and Reinforcement Learning, and I believe technology can significantly improve people's lives.">أتطلع باستمرار لتوسيع معرفتي في مجالات مثل التعلم العميق والذكاء الاصطناعي المعزز، وأؤمن بأن التكنولوجيا يمكن أن تساهم في تحسين حياة البشر.</p>
+<div style="margin-top:25px;">
+<button class="btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">
+<i class="fas fa-download"></i>
+<span data-ar="تحميل السيرة الذاتية" data-en="Download CV">تحميل السيرة الذاتية</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Skills Section -->
+<section id="skills" style="background: var(--dark-2);">
+<div class="section-header reveal">
+<div class="section-badge">
+<i class="fas fa-cogs"></i>
+<span data-ar="قدراتي" data-en="My Abilities">قدراتي</span>
+</div>
+<h2 class="section-title">
+<span data-ar="المهارات " data-en="Technical ">المهارات </span>
+<span class="gradient-text" data-ar="التقنية" data-en="Skills">التقنية</span>
+</h2>
+<p class="section-desc" data-ar="مجموعة واسعة من المهارات التقنية التي اكتسبتها خلال مسيرتي في البرمجة والذكاء الاصطناعي" data-en="A wide range of technical skills acquired throughout my career in programming and AI">مجموعة واسعة من المهارات التقنية التي اكتسبتها خلال مسيرتي في البرمجة والذكاء الاصطناعي</p>
+</div>
+<div class="skills-container">
+<div class="skills-tabs reveal">
+<button class="skill-tab active" onclick="filterSkills('all', this)" data-ar="الكل" data-en="All">الكل</button>
+<button class="skill-tab" onclick="filterSkills('languages', this)" data-ar="اللغات" data-en="Languages">اللغات</button>
+<button class="skill-tab" onclick="filterSkills('frameworks', this)" data-ar="الأدوات" data-en="Tools">الأدوات</button>
+<button class="skill-tab" onclick="filterSkills('ai', this)" data-ar="الذكاء الاصطناعي" data-en="AI">الذكاء الاصطناعي</button>
+</div>
+<div class="skills-grid reveal" id="skillsGrid">
+<!-- Skills will be populated by JS -->
+</div>
+</div>
+</section>
+
+<!-- Projects Section -->
+<section id="projects">
+<div class="section-header reveal">
+<div class="section-badge">
+<i class="fas fa-rocket"></i>
+<span data-ar="أعمالي" data-en="My Work">أعمالي</span>
+</div>
+<h2 class="section-title">
+<span data-ar="المشاريع " data-en="Featured ">المشاريع </span>
+<span class="gradient-text" data-ar="المميزة" data-en="Projects">المميزة</span>
+</h2>
+<p class="section-desc" data-ar="مجموعة من المشاريع التي عملت عليها وطرحتها للنور" data-en="A collection of projects I've worked on and launched">مجموعة من المشاريع التي عملت عليها وطرحتها للنور</p>
+</div>
+<div class="projects-container">
+<div class="projects-grid reveal" id="projectsGrid">
+<!-- Projects will be populated by JS -->
+</div>
+</div>
+</section>
+
+<!-- Contact Section -->
+<section id="contact" style="background: var(--dark-2);">
+<div class="section-header reveal">
+<div class="section-badge">
+<i class="fas fa-envelope"></i>
+<span data-ar="تواصل" data-en="Reach out">تواصل</span>
+</div>
+<h2 class="section-title">
+<span data-ar="تواصل " data-en="Get in ">تواصل </span>
+<span class="gradient-text" data-ar="معي" data-en="Touch">معي</span>
+</h2>
+<p class="section-desc" data-ar="لا تتردد في التواصل معي لأي استفسار أو فرصة عمل" data-en="Don't hesitate to reach out for any inquiries or job opportunities">لا تتردد في التواصل معي لأي استفسار أو فرصة عمل</p>
+</div>
+<div class="contact-container">
+<div class="contact-grid reveal">
+<div class="contact-info">
+<a href="mailto:khalidsalman7140@gmail.com" class="contact-item">
+<div class="contact-icon"><i class="fas fa-envelope"></i></div>
+<div class="contact-details">
+<div class="label" data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</div>
+<div class="value">khalidsalman7140@gmail.com</div>
+</div>
+</a>
+<a href="tel:+967783701365" class="contact-item">
+<div class="contact-icon"><i class="fas fa-phone"></i></div>
+<div class="contact-details">
+<div class="label" data-ar="رقم الهاتف" data-en="Phone">رقم الهاتف</div>
+<div class="value">+967 783 701 365</div>
+</div>
+</a>
+<div class="contact-item">
+<div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+<div class="contact-details">
+<div class="label" data-ar="الموقع" data-en="Location">الموقع</div>
+<div class="value" data-ar="إب، اليمن" data-en="Ibb, Yemen">إب، اليمن</div>
+</div>
+</div>
+<div class="social-links">
+<a href="https://wa.me/967783701365" target="_blank" class="social-link" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+<a href="https://t.me/tqgskek" target="_blank" class="social-link" title="Telegram"><i class="fab fa-telegram"></i></a>
+<a href="https://instagram.com/ls.twr1656" target="_blank" class="social-link" title="Instagram"><i class="fab fa-instagram"></i></a>
+<a href="#" class="social-link" title="Facebook"><i class="fab fa-facebook"></i></a>
+<a href="#" class="social-link" title="GitHub"><i class="fab fa-github"></i></a>
+<a href="#" class="social-link" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+</div>
+</div>
+<div class="contact-form">
+<h3 style="font-size:1.3rem; font-weight:700; margin-bottom:20px;" data-ar="أرسل رسالة" data-en="Send a Message">أرسل رسالة</h3>
+<form id="contactForm" onsubmit="handleFormSubmit(event)">
+<div class="form-group">
+<label data-ar="الاسم الكامل" data-en="Full Name">الاسم الكامل</label>
+<input type="text" id="formName" required data-ar-placeholder="أدخل اسمك" data-en-placeholder="Enter your name" placeholder="أدخل اسمك">
+</div>
+<div class="form-group">
+<label data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</label>
+<input type="email" id="formEmail" required data-ar-placeholder="أدخل بريدك الإلكتروني" data-en-placeholder="Enter your email" placeholder="أدخل بريدك الإلكتروني">
+</div>
+<div class="form-group">
+<label data-ar="الموضوع" data-en="Subject">الموضوع</label>
+<input type="text" id="formSubject" required data-ar-placeholder="موضوع الرسالة" data-en-placeholder="Message subject" placeholder="موضوع الرسالة">
+</div>
+<div class="form-group">
+<label data-ar="الرسالة" data-en="Message">الرسالة</label>
+<textarea id="formMessage" required data-ar-placeholder="اكتب رسالتك هنا..." data-en-placeholder="Write your message here..." placeholder="اكتب رسالتك هنا..."></textarea>
+</div>
+<button type="submit" class="btn-primary form-submit">
+<i class="fas fa-paper-plane"></i>
+<span data-ar="إرسال الرسالة" data-en="Send Message">إرسال الرسالة</span>
+</button>
+<div class="form-message" id="formMessage"></div>
+</form>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+<div class="footer-content">
+<div class="footer-brand">
+<h3 data-ar="خالد سلمان" data-en="Khalid Salman">خالد سلمان</h3>
+<p data-ar="مبرمج فلاتر ومتخصص في الذكاء الاصطناعي. أسعى لبناء حلول تكنولوجية مبتكرة تساهم في تحسين حياة الناس." data-en="Flutter Developer & AI Specialist. I strive to build innovative tech solutions that improve people's lives.">مبرمج فلاتر ومتخصص في الذكاء الاصطناعي. أسعى لبناء حلول تكنولوجية مبتكرة تساهم في تحسين حياة الناس.</p>
+<div class="social-links" style="margin-top:15px;">
+<a href="https://wa.me/967783701365" target="_blank" class="social-link"><i class="fab fa-whatsapp"></i></a>
+<a href="https://t.me/tqgskek" target="_blank" class="social-link"><i class="fab fa-telegram"></i></a>
+<a href="https://instagram.com/ls.twr1656" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+<a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+<a href="#" class="social-link"><i class="fab fa-github"></i></a>
+</div>
+</div>
+<div class="footer-links">
+<h4 data-ar="روابط سريعة" data-en="Quick Links">روابط سريعة</h4>
+<ul>
+<li><a href="#home" data-ar="الرئيسية" data-en="Home">الرئيسية</a></li>
+<li><a href="#about" data-ar="عني" data-en="About">عني</a></li>
+<li><a href="#skills" data-ar="المهارات" data-en="Skills">المهارات</a></li>
+<li><a href="#projects" data-ar="المشاريع" data-en="Projects">المشاريع</a></li>
+<li><a href="#contact" data-ar="التواصل" data-en="Contact">التواصل</a></li>
+</ul>
+</div>
+<div class="footer-contact">
+<h4 data-ar="معلومات التواصل" data-en="Contact Info">معلومات التواصل</h4>
+<div class="footer-contact-item">
+<i class="fas fa-envelope"></i>
+<span>khalidsalman7140@gmail.com</span>
+</div>
+<div class="footer-contact-item">
+<i class="fas fa-phone"></i>
+<span>+967 783 701 365</span>
+</div>
+<div class="footer-contact-item">
+<i class="fas fa-map-marker-alt"></i>
+<span data-ar="إب، اليمن" data-en="Ibb, Yemen">إب، اليمن</span>
+</div>
+</div>
+</div>
+<div class="footer-bottom">
+<div class="footer-copyright">
+<span data-ar="© 2026 جميع الحقوق محفوظة لـ " data-en="© 2026 All Rights Reserved to ">© 2026 جميع الحقوق محفوظة لـ </span>
+<span class="name">خالد سلمان | Khalid Salman</span>
+</div>
+<div style="display:flex;align-items:center;gap:10px;">
+<button onclick="openDBPanel()" style="background:var(--glass);border:1px solid var(--glass-border);color:var(--text-muted);padding:8px 16px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:0.85rem;" data-ar="📊 قاعدة البيانات" data-en="📊 Database">📊 قاعدة البيانات</button>
+</div>
+</div>
+</footer>
+
+<!-- AI Chatbot -->
+<button class="chatbot-toggle" id="chatbotToggle" onclick="toggleChatbot()">
+<i class="fas fa-robot"></i>
+</button>
+<div class="chatbot-window" id="chatbotWindow">
+<div class="chatbot-header">
+<div class="chatbot-header-info">
+<div class="chatbot-header-avatar">🤖</div>
+<div>
+<div class="chatbot-header-name" data-ar="مساعد خالد الذكي" data-en="Khalid's AI Assistant">مساعد خالد الذكي</div>
+<div class="chatbot-header-status" data-ar="متصل الآن" data-en="Online now">متصل الآن</div>
+</div>
+</div>
+<button class="chatbot-close" onclick="toggleChatbot()"><i class="fas fa-times"></i></button>
+</div>
+<div class="chatbot-messages" id="chatMessages">
+<div class="chat-message bot" data-ar="مرحباً! 👋 أنا المساعد الذكي لخالد سلمان. كيف يمكنني مساعدتك؟ يمكنك سؤالي عن مهاراته، مشاريعه، أو كيفية التواصل معه." data-en="Hello! 👋 I'm Khalid Salman's AI assistant. How can I help you? You can ask about his skills, projects, or how to contact him.">مرحباً! 👋 أنا المساعد الذكي لخالد سلمان. كيف يمكنني مساعدتك؟ يمكنك سؤالي عن مهاراته، مشاريعه، أو كيفية التواصل معه.</div>
+</div>
+<div class="chatbot-input">
+<input type="text" id="chatInput" data-ar-placeholder="اكتب رسالتك..." data-en-placeholder="Type your message..." placeholder="اكتب رسالتك..." onkeypress="if(event.key==='Enter')sendChatMessage()">
+<button class="chatbot-send" onclick="sendChatMessage()"><i class="fas fa-paper-plane"></i></button>
+</div>
+</div>
+
+<!-- Google Search Modal -->
+<div class="search-modal" id="searchModal">
+<div class="search-modal-content">
+<div class="search-modal-header">
+<h3><i class="fab fa-google" style="color:#4285f4;"></i> <span data-ar="بحث في جوجل" data-en="Google Search">بحث في جوجل</span></h3>
+<button class="search-modal-close" onclick="closeSearchModal()"><i class="fas fa-times"></i></button>
+</div>
+<div class="search-input-wrapper">
+<input type="text" id="googleSearchInput" data-ar-placeholder="ابحث في جوجل عن خالد سلمان..." data-en-placeholder="Search Google for Khalid Salman..." placeholder="ابحث في جوجل عن خالد سلمان..." onkeypress="if(event.key==='Enter')performGoogleSearch()">
+<button class="search-google-btn" onclick="performGoogleSearch()">
+<i class="fas fa-search"></i>
+<span data-ar="بحث" data-en="Search">بحث</span>
+</button>
+</div>
+</div>
+</div>
+
+<!-- Database Panel -->
+<div class="db-panel" id="dbPanel">
+<div class="db-panel-header">
+<h3><i class="fas fa-database"></i> <span data-ar="سجل الرسائل" data-en="Messages Log">سجل الرسائل</span></h3>
+<button class="db-panel-close" onclick="closeDBPanel()"><i class="fas fa-times"></i></button>
+</div>
+<div class="db-panel-body" id="dbPanelBody">
+<div class="db-empty">
+<i class="fas fa-inbox"></i>
+<p data-ar="لا توجد رسائل بعد" data-en="No messages yet">لا توجد رسائل بعد</p>
+</div>
+</div>
+</div>
+
+<!-- Scroll to Top -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+<i class="fas fa-chevron-up"></i>
+</button>
+
+<script>
+// ==================== GLOBALS ====================
+let currentLang = 'ar';
+let db = null;
+let visitorCounter = 0;
+
+// ==================== SKILLS DATA ====================
+const skillsData = [
+{ id:1, name:{ar:'Dart', en:'Dart'}, icon:'fa-code', desc:{ar:'لغة البرمجة الرئيسية لتطوير تطبيقات Flutter', en:'Primary programming language for Flutter development'}, category:'languages', level:90 },
+{ id:2, name:{ar:'Flutter', en:'Flutter'}, icon:'fa-mobile-alt', desc:{ar:'إطار عمل لتطوير تطبيقات عبر المنصات', en:'Cross-platform mobile app development framework'}, category:'frameworks', level:92 },
+{ id:3, name:{ar:'Python', en:'Python'}, icon:'fa-brands fa-python', desc:{ar:'لغة البرمجة المستخدمة في الذكاء الاصطناعي', en:'Programming language used in AI'}, category:'languages', level:80 },
+{ id:4, name:{ar:'Firebase', en:'Firebase'}, icon:'fa-fire', desc:{ar:'خدمات سحابية للتوثيق وتخزين البيانات', en:'Cloud services for auth and data storage'}, category:'frameworks', level:85 },
+{ id:5, name:{ar:'SQLite', en:'SQLite'}, icon:'fa-database', desc:{ar:'تخزين البيانات محلياً بكفاءة عالية', en:'Efficient local data storage'}, category:'frameworks', level:78 },
+{ id:6, name:{ar:'GraphQL', en:'GraphQL'}, icon:'fa-project-diagram', desc:{ar:'استرجاع البيانات بشكل فعال ومنظم', en:'Efficient and organized data retrieval'}, category:'frameworks', level:70 },
+{ id:7, name:{ar:'Git', en:'Git'}, icon:'fa-code-branch', desc:{ar:'إدارة الأكواد وتنسيق العمل الجماعي', en:'Version control and team collaboration'}, category:'frameworks', level:82 },
+{ id:8, name:{ar:'التعلم الآلي', en:'Machine Learning'}, icon:'fa-brain', desc:{ar:'تطوير نماذج تعلم آلي ذكية', en:'Developing intelligent ML models'}, category:'ai', level:75 },
+{ id:9, name:{ar:'التعلم العميق', en:'Deep Learning'}, icon:'fa-network-wired', desc:{ar:'شبكات عصبية عميقة ومعالجة البيانات', en:'Deep neural networks and data processing'}, category:'ai', level:68 },
+{ id:10, name:{ar:'الرؤية الحاسوبية', en:'Computer Vision'}, icon:'fa-eye', desc:{ar:'تحليل ومعالجة الصور باستخدام OpenCV', en:'Image analysis and processing with OpenCV'}, category:'ai', level:72 },
+{ id:11, name:{ar:'Android Studio', en:'Android Studio'}, icon:'fa-android', desc:{ar:'بيئة التطوير لتطبيقات أندرويد', en:'Development environment for Android apps'}, category:'frameworks', level:80 },
+{ id:12, name:{ar:'OpenCV', en:'OpenCV'}, icon:'fa-camera', desc:{ar:'مكتبة معالجة الصور والرؤية الحاسوبية', en:'Image processing and computer vision library'}, category:'ai', level:70 },
+];
+
+// ==================== PROJECTS DATA ====================
+const projectsData = [
+{
+id:1,
+title:{ar:'تطبيق إدارة البيانات', en:'Data Management App'},
+desc:{ar:'تطبيق لإدارة البيانات باستخدام Flutter لواجهة المستخدم و Firebase لتخزين البيانات. يتيح للمستخدمين تخزين، تنظيم، واسترجاع البيانات بمرونة وسرعة.', en:'A mobile app for managing data using Flutter for UI and Firebase for backend services. Allows users to store, organize, and retrieve data dynamically with high efficiency.'},
+tags:['Flutter','Firebase','Dart'],
+img:' IMG-20250725-WA0007.jpg/public_source/0c41cd04-b4b2-4753-8e23-5022c71aa524/189002fd1-65cb-4738-ba59-d61f1d996723.png'
+},
+{
+id:2, 
+title:{ar:'تطبيق التخزين المحلي', en:'Local Storage App'},
+desc:{ar:'تطبيق يتيح للمستخدمين تخزين البيانات بشكل محلي باستخدام SQLite. يتميز بسرعته في معالجة البيانات وتخزينها في الذاكرة المحلية.', en:'An app for local data storage using SQLite. Features fast and reliable data retrieval while ensuring a smooth user experience.'},
+tags:['Flutter','SQLite','Dart'],
+img:' IMG-20250725-WA0007.jpg/public_source/0c41cd04-b4b2-4753-8e23-5022c71aa524/189002fd1-65cb-4738-ba59-d61f1d996723.png'
+},
+{
+id:3,
+title:{ar:'تطبيق تحليل الصور بالذكاء الاصطناعي', en:'AI Image Analysis App'},
+desc:{ar:'تطبيق يقوم باستخدام OpenCV و Python لتحليل الصور وتقديم ملاحظات وتوصيات بناءً على المعطيات. يقدم حلولاً ذكية لمشاكل حقيقية.', en:'An app that uses OpenCV and Python to analyze images and provide feedback or recommendations. Offers intelligent solutions to real-world problems through AI.'},
+tags:['Flutter','Python','OpenCV','AI'],
+img:' IMG-20250725-WA0007.jpg/public_source/0c41cd04-b4b2-4753-8e23-5022c71aa524/189002fd1-65cb-4738-ba59-d61f1d996723.png'
+}
+];
+
+// ==================== AI CHATBOT RESPONSES ====================
+const aiResponses = {
+ar: {
+greetings: ['مرحباً! 👋', 'أهلاً وسهلاً! 😊', 'مرحبا بك! 🌟', 'هلا والله! 🙌'],
+skills: 'خالد سلمان يتقن عدة تقنيات: Flutter و Dart لتطوير التطبيقات، Python و OpenCV للذكاء الاصطناعي، بالإضافة إلى Firebase و SQLite و GraphQL و Git. مستوى خبرته في Flutter يتجاوز 90%! 🚀',
+projects: 'خالد يعمل على 3 مشاريع مميزة: تطبيق إدارة البيانات (Flutter + Firebase)، تطبيق التخزين المحلي (Flutter + SQLite)، وتطبيق تحليل الصور بالذكاء الاصطناعي (Flutter + Python + OpenCV). ',
+contact: 'يمكنك التواصل مع خالد عبر:\n📧 البريد: khalidsalman7140@gmail.com\n📱 الهاتف: +967783701365\n💬 واتساب: متاح\n✈️ تلجرام: @tqgskek\n📷 إنستغرام: ls.twr1656',
+flutter: 'خالد متخصص في Flutter! يستخدمه لتطوير تطبيقات موبايل عالية الأداء عبر المنصات (iOS و Android). لديه خبرة واسعة في واجهات المستخدم وسرعة التطبيق. ',
+ai: 'خالد متخصص في الذكاء الاصطناعي! يركز على التعلم الآلي (Machine Learning)، التعلم العميق (Deep Learning)، والرؤية الحاسوبية (Computer Vision) باستخدام Python و OpenCV. 🤖',
+about: 'خالد سلمان، 23 سنة، من إب في اليمن. مبرمج فلاتر ومتخصص في الذكاء الاصطناعي. شغوف بالتكنولوجيا وتطوير حلول مبتكرة تحسّن حياة الناس. 🎯',
+thanks: 'العفو! سعيد بمساعدتك. إذا كان لديك أي سؤال آخر، لا تتردد! 😊',
+default: 'شكراً لرسالتك! أنا مساعد خالد الذكي. يمكنك سؤالي عن:\n• مهاراته التقنية\n• مشاريعه\n• كيفية التواصل معه\n• معلومات عنه\nجرب أن تسألني! '
+},
+en: {
+greetings: ['Hello! 👋', 'Hi there! 😊', 'Welcome! 🌟', 'Hey! 🙌'],
+skills: 'Khalid Salman is proficient in multiple technologies: Flutter & Dart for app development, Python & OpenCV for AI, plus Firebase, SQLite, GraphQL, and Git. His Flutter expertise exceeds 90%! 🚀',
+projects: "Khalid is working on 3 featured projects: Data Management App (Flutter + Firebase), Local Storage App (Flutter + SQLite), and AI Image Analysis App (Flutter + Python + OpenCV). 💡",
+contact: "You can reach Khalid via:\n Email: khalidsalman7140@gmail.com\n📱 Phone: +967783701365\n💬 WhatsApp: Available\n✈️ Telegram: @tqgskek\n📷 Instagram: ls.twr1656",
+flutter: 'Khalid is a Flutter specialist! He uses it to build high-performance cross-platform mobile apps (iOS & Android). He has extensive experience in UI design and app performance. 📱',
+ai: 'Khalid specializes in AI! He focuses on Machine Learning, Deep Learning, and Computer Vision using Python and OpenCV. 🤖',
+about: 'Khalid Salman, 23 years old, from Ibb, Yemen. Flutter Developer & AI Specialist. Passionate about technology and building innovative solutions that improve people\'s lives. 🎯',
+thanks: "You're welcome! Happy to help. If you have any other questions, feel free to ask! 😊",
+default: "Thanks for your message! I'm Khalid's AI assistant. You can ask me about:\n• His technical skills\n• His projects\n• How to contact him\n• Info about him\nTry asking me! 💬"
+}
+};
+
+// ==================== INITIALIZATION ====================
+window.addEventListener('load', async () => {
+// Hide loader
+setTimeout(() => {
+document.getElementById('loader').classList.add('hidden');
+}, 1500);
+
+// Initialize particles
+initParticles();
+
+// Initialize database
+await initDatabase();
+
+// Render skills
+renderSkills('all');
+
+// Render projects
+renderProjects();
+
+// Animate stats
+animateStats();
+
+// Scroll reveal
+initScrollReveal();
+
+// Navbar scroll
+initNavbarScroll();
+});
+
+// ==================== PARTICLES ====================
+function initParticles() {
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+const numParticles = 80;
+
+function resize() {
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+constructor() {
+this.x = Math.random() * canvas.width;
+this.y = Math.random() * canvas.height;
+this.size = Math.random() * 2 + 0.5;
+this.speedX = (Math.random() - 0.5) * 0.5;
+this.speedY = (Math.random() - 0.5) * 0.5;
+this.opacity = Math.random() * 0.5 + 0.1;
+}
+update() {
+this.x += this.speedX;
+this.y += this.speedY;
+if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+}
+draw() {
+ctx.beginPath();
+ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+ctx.fillStyle = `rgba(108, 92, 231, ${this.opacity})`;
+ctx.fill();
+}
+}
+
+for (let i = 0; i < numParticles; i++) {
+particles.push(new Particle());
+}
+
+function connectParticles() {
+for (let i = 0; i < particles.length; i++) {
+for (let j = i + 1; j < particles.length; j++) {
+const dx = particles[i].x - particles[j].x;
+const dy = particles[i].y - particles[j].y;
+const dist = Math.sqrt(dx * dx + dy * dy);
+if (dist < 150) {
+ctx.beginPath();
+ctx.strokeStyle = `rgba(108, 92, 231, ${0.1 * (1 - dist / 150)})`;
+ctx.lineWidth = 0.5;
+ctx.moveTo(particles[i].x, particles[i].y);
+ctx.lineTo(particles[j].x, particles[j].y);
+ctx.stroke();
+}
+}
+}
+}
+
+function animate() {
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+particles.forEach(p => {
+p.update();
+p.draw();
+});
+connectParticles();
+requestAnimationFrame(animate);
+}
+animate();
+}
+
+// ==================== DATABASE ====================
+async function initDatabase() {
+try {
+const SQL = await initSqlJs({
+locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.8.0/${file}`
+});
+db = new SQL.Database();
+
+db.run(`CREATE TABLE IF NOT EXISTS messages (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+name TEXT NOT NULL,
+email TEXT NOT NULL,
+subject TEXT NOT NULL,
+message TEXT NOT NULL,
+created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)`);
+
+db.run(`CREATE TABLE IF NOT EXISTS visitors (
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+page TEXT DEFAULT 'portfolio'
+)`);
+
+// Track visitor
+db.run(`INSERT INTO visitors (page) VALUES ('portfolio')`);
+visitorCounter++;
+} catch(e) {
+console.log('Database initialization note:', e.message);
+}
+}
+
+function insertMessage(name, email, subject, message) {
+if (db) {
+try {
+db.run(`INSERT INTO messages (name, email, subject, message) VALUES (?, ?, ?, ?)`, [name, email, subject, message]);
+return true;
+} catch(e) {
+console.error('DB insert error:', e);
+return false;
+}
+}
+return false;
+}
+
+function getMessages() {
+if (db) {
+try {
+const stmt = db.prepare('SELECT * FROM messages ORDER BY id DESC');
+const results = [];
+while (stmt.step()) {
+results.push(stmt.getAsObject());
+}
+stmt.free();
+return results;
+} catch(e) {
+console.error('DB query error:', e);
+return [];
+}
+}
+return [];
+}
+
+// ==================== SKILLS RENDERING ====================
+function renderSkills(filter) {
+const grid = document.getElementById('skillsGrid');
+const filtered = filter === 'all' ? skillsData : skillsData.filter(s => s.category === filter);
+
+grid.innerHTML = filtered.map(skill => `
+<div class="skill-card" data-category="${skill.category}">
+<div class="skill-icon" style="background: var(--glass);">
+<i class="fas ${skill.icon}" style="background: var(--gradient-1); -webkit-background-clip: text; -webkit-text-fill-color: transparent;"></i>
+</div>
+<h4>${currentLang === 'ar' ? skill.name.ar : skill.name.en}</h4>
+<p>${currentLang === 'ar' ? skill.desc.ar : skill.desc.en}</p>
+<div class="skill-bar-wrapper">
+<div class="skill-bar-bg">
+<div class="skill-bar-fill" data-width="${skill.level}" style="width: ${skill.level}%"></div>
+</div>
+<div class="skill-level">${skill.level}%</div>
+</div>
+</div>
+`).join('');
+
+// Animate bars
+setTimeout(() => {
+document.querySelectorAll('.skill-bar-fill').forEach(bar => {
+bar.style.width = bar.dataset.width + '%';
+});
+}, 100);
+}
+
+function filterSkills(category, btn) {
+document.querySelectorAll('.skill-tab').forEach(t => t.classList.remove('active'));
+btn.classList.add('active');
+renderSkills(category);
+}
+
+// ==================== PROJECTS RENDERING ====================
+function renderProjects() {
+const grid = document.getElementById('projectsGrid');
+grid.innerHTML = projectsData.map(proj => `
+<div class="project-card">
+<img src="${proj.img}" alt="${currentLang === 'ar' ? proj.title.ar : proj.title.en}" class="project-image">
+<div class="project-content">
+<div class="project-tags">
+${proj.tags.map(t => `<span class="project-tag">${t}</span>`).join('')}
+</div>
+<h3>${currentLang === 'ar' ? proj.title.ar : proj.title.en}</h3>
+<p>${currentLang === 'ar' ? proj.desc.ar : proj.desc.en}</p>
+<a href="#" class="project-link">
+<span data-ar="عرض التفاصيل" data-en="View Details">${currentLang === 'ar' ? 'عرض التفاصيل' : 'View Details'}</span>
+<i class="fas fa-arrow-${currentLang === 'ar' ? 'left' : 'right'}"></i>
+</a>
+</div>
+</div>
+`).join('');
+}
+
+// ==================== LANGUAGE TOGGLE ====================
+function toggleLanguage() {
+currentLang = currentLang === 'ar' ? 'en' : 'ar';
+const body = document.body;
+const html = document.documentElement;
+
+if (currentLang === 'en') {
+body.classList.add('en');
+html.setAttribute('dir', 'ltr');
+html.setAttribute('lang', 'en');
+document.getElementById('langToggle').textContent = 'AR';
+} else {
+body.classList.remove('en');
+html.setAttribute('dir', 'rtl');
+html.setAttribute('lang', 'ar');
+document.getElementById('langToggle').textContent = 'EN';
+}
+
+// Update all text elements
+document.querySelectorAll('[data-ar]').forEach(el => {
+const text = currentLang === 'ar' ? el.getAttribute('data-ar') : el.getAttribute('data-en');
+if (text) el.textContent = text;
+});
+
+// Update placeholders
+document.querySelectorAll('[data-ar-placeholder]').forEach(el => {
+const ph = currentLang === 'ar' ? el.getAttribute('data-ar-placeholder') : el.getAttribute('data-en-placeholder');
+if (ph) el.placeholder = ph;
+});
+
+// Re-render dynamic content
+renderSkills(document.querySelector('.skill-tab.active')?.textContent === (currentLang === 'ar' ? 'الكل' : 'All') ? 'all' :
+document.querySelector('.skill-tab.active')?.textContent === (currentLang === 'ar' ? 'اللغات' : 'Languages') ? 'languages' :
+document.querySelector('.skill-tab.active')?.textContent === (currentLang === 'ar' ? 'الأدوات' : 'Tools') ? 'frameworks' : 'ai');
+renderProjects();
+
+// Update nav logo
+document.querySelector('.nav-logo-text').textContent = currentLang === 'ar' ? 'خالد سلمان' : 'Khalid Salman';
+}
+
+// ==================== CHATBOT ====================
+function toggleChatbot() {
+const win = document.getElementById('chatbotWindow');
+win.classList.toggle('open');
+}
+
+function sendChatMessage() {
+const input = document.getElementById('chatInput');
+const msg = input.value.trim();
+if (!msg) return;
+
+addChatMessage(msg, 'user');
+input.value = '';
+
+// Show typing
+const typingDiv = document.createElement('div');
+typingDiv.className = 'chat-typing';
+typingDiv.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+const messagesDiv = document.getElementById('chatMessages');
+messagesDiv.appendChild(typingDiv);
+messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+// Generate response
+setTimeout(() => {
+typingDiv.remove();
+const response = getAIResponse(msg);
+addChatMessage(response, 'bot');
+}, 1000 + Math.random() * 1000);
+}
+
+function addChatMessage(text, type) {
+const messagesDiv = document.getElementById('chatMessages');
+const div = document.createElement('div');
+div.className = `chat-message ${type}`;
+div.textContent = text;
+div.style.whiteSpace = 'pre-line';
+messagesDiv.appendChild(div);
+messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
+
+function getAIResponse(msg) {
+const lower = msg.toLowerCase();
+const isAr = currentLang === 'ar';
+const R = aiResponses[isAr ? 'ar' : 'en'];
+
+// Greetings
+if (/^(مرحبا|هلا|سلام|أهلا|هاي|hello|hi|hey|مرحباً)/i.test(lower)) {
+return R.greetings[Math.floor(Math.random() * R.greetings.length)];
+}
+if (/شكر|thanks|thank/i.test(lower)) return R.thanks;
+
+if (/مهار|skill|تقن|techn/i.test(lower)) return R.skills;
+if (/مشروع|project|أعم|work/i.test(lower)) return R.projects;
+if (/تواصل|contact|إيميل|email|هاتف|phone|واتساب|whatsapp|تلجرام|telegram|إنستا|instagram/i.test(lower)) return R.contact;
+if (/فلاتر|flutter/i.test(lower)) return R.flutter;
+if (/ذكاء|ai|artificial|intelligence|تعلم|learning|ملا|معمق|deep|رؤي|vision|opencv/i.test(lower)) return R.ai;
+if (/عني|about|من هو|who|خالد|khalid|عمر|age|سن|year/i.test(lower)) return R.about;
+
+return R.default;
+}
+
+// ==================== FORM HANDLING ====================
+function handleFormSubmit(e) {
+e.preventDefault();
+const name = document.getElementById('formName').value.trim();
+const email = document.getElementById('formEmail').value.trim();
+const subject = document.getElementById('formSubject').value.trim();
+const message = document.getElementById('formMessage').value.trim();
+
+const success = insertMessage(name, email, subject, message);
+const msgEl = document.getElementById('formMessage');
+
+if (success) {
+msgEl.className = 'form-message success';
+msgEl.textContent = currentLang === 'ar'
+? '✅ تم إرسال رسالتك بنجاح! سيتم الرد عليك قريباً.'
+: '✅ Your message has been sent successfully! You will receive a response soon.';
+document.getElementById('contactForm').reset();
+} else {
+msgEl.className = 'form-message success';
+msgEl.textContent = currentLang === 'ar'
+? '✅ تم إرسال رسالتك! (وضع العرض التوضيحي)'
+: '✅ Message sent! (Demo mode)';
+document.getElementById('contactForm').reset();
+}
+
+msgEl.style.display = 'block';
+setTimeout(() => { msgEl.style.display = 'none'; }, 5000);
+}
+
+// ==================== GOOGLE SEARCH ====================
+function openSearchModal() {
+document.getElementById('searchModal').classList.add('open');
+setTimeout(() => document.getElementById('googleSearchInput').focus(), 100);
+}
+function closeSearchModal() {
+document.getElementById('searchModal').classList.remove('open');
+}
+function performGoogleSearch() {
+const query = document.getElementById('googleSearchInput').value.trim();
+const searchQuery = query || (currentLang === 'ar' ? 'خالد سلمان مبرمج فلاتر اليمن' : 'Khalid Salman Flutter Developer Yemen');
+window.open(`https://www.google.com/search?q=${encodeURIComponent(searchQuery)}`, '_blank');
+closeSearchModal();
+}
+
+// ==================== DATABASE PANEL ====================
+function openDBPanel() {
+document.getElementById('dbPanel').classList.add('open');
+renderDBRecords();
+}
+function closeDBPanel() {
+document.getElementById('dbPanel').classList.remove('open');
+}
+function renderDBRecords() {
+const body = document.getElementById('dbPanelBody');
+const messages = getMessages();
+
+if (messages.length === 0) {
+body.innerHTML = `
+<div class="db-empty">
+<i class="fas fa-inbox"></i>
+<p>${currentLang === 'ar' ? 'لا توجد رسائل بعد' : 'No messages yet'}</p>
+</div>`;
+return;
+}
+
+body.innerHTML = messages.map(m => `
+<div class="db-record">
+<div class="record-time">${m.created_at}</div>
+<div class="record-name">${m.name}</div>
+<div class="record-email">${m.email}</div>
+<div class="record-msg"><strong>${m.subject}:</strong> ${m.message}</div>
+</div>
+`).join('');
+}
+
+// ==================== NAVIGATION ====================
+function toggleMobileMenu() {
+document.getElementById('navLinks').classList.toggle('open');
+}
+
+function initNavbarScroll() {
+window.addEventListener('scroll', () => {
+const navbar = document.getElementById('navbar');
+const scrollTop = document.getElementById('scrollTop');
+
+if (window.scrollY > 50) {
+navbar.classList.add('scrolled');
+} else {
+navbar.classList.remove('scrolled');
+}
+
+if (window.scrollY > 400) {
+scrollTop.classList.add('visible');
+} else {
+scrollTop.classList.remove('visible');
+}
+
+// Active nav link
+const sections = document.querySelectorAll('section[id]');
+let current = '';
+sections.forEach(sec => {
+const top = sec.offsetTop - 200;
+if (window.scrollY >= top) current = sec.getAttribute('id');
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+a.classList.remove('active');
+if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+});
+});
+}
+
+// ==================== SCROLL REVEAL ====================
+function initScrollReveal() {
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+entry.target.classList.add('visible');
+}
+});
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+
+// ==================== STATS ANIMATION ====================
+function animateStats() {
+const observer = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) {
+const counters = entry.target.querySelectorAll('.stat-number');
+counters.forEach(counter => {
+const target = parseInt(counter.dataset.count);
+let current = 0;
+const increment = target / 40;
+const timer = setInterval(() => {
+current += increment;
+if (current >= target) {
+current = target;
+clearInterval(timer);
+}
+counter.textContent = Math.floor(current);
+}, 50);
+});
+observer.unobserve(entry.target);
+}
+});
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.hero-stats').forEach(el => observer.observe(el));
+}
+
+// Close modals on outside click
+document.getElementById('searchModal').addEventListener('click', function(e) {
+if (e.target === this) closeSearchModal();
+});
+</script>
+</body>
+</html> 
